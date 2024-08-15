@@ -1,4 +1,4 @@
-# React/TypeScript Product Details Page
+### NEXT/TypeScript Product Details Page
 
 This project is a React/TypeScript application that demonstrates how to display product details with server-side rendering (SSR) and proper error handling. The project includes styling with Tailwind CSS and handles cases where product details are not found.
 
