@@ -26,6 +26,7 @@ To run this project locally, follow these steps:
    ```bash
    git clone https://github.com/raqib-rasheed/oonzo-assessment
    cd oonzo-assessment
+   npm install
+   npm run dev
 
-npm install
-npm run dev
+
