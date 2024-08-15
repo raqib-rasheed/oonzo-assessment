@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 export interface Product {
   id: number;
@@ -16,10 +17,34 @@ export interface Product {
 }
 
 interface ProductPageProps {
-  product: Product;
+  product: Product | null;
 }
 
 const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
+  const router = useRouter();
+
+  if (!product) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+        <div className="text-center bg-white p-8 rounded-lg shadow-lg">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            Product Not Found
+          </h1>
+          <p className="text-gray-600 mb-4">
+            Sorry, we couldn&apost find the product you&aposre looking
+            for.
+          </p>
+          <button
+            onClick={() => router.push('/')}
+            className="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
+          >
+            Go Back to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -117,9 +142,16 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
 export const getServerSideProps: GetServerSideProps = async (
   context
 ) => {
-  const { id } = context.params!;
-  const res = await fetch(`https://fakestoreapi.com/products/${id}`);
-  const product = await res.json();
+  let product = null;
+  try {
+    const { id } = context.params!;
+    const res = await fetch(
+      `https://fakestoreapi.com/products/${id}`
+    );
+    product = await res.json();
+  } catch (error) {
+    console.log('failed to fetch product');
+  }
 
   return {
     props: {
